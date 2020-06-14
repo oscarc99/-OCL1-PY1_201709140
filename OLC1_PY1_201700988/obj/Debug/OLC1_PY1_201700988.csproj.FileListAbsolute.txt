@@ -1,0 +1,30 @@
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.exe.config
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.exe
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.pdb
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.csprojAssemblyReference.cache
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.DisplayReportes.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.Form1.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.Properties.Resources.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.reporteLexemas.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.verImagen.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.csproj.GenerateResource.cache
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.exe
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\OLC1_1S20_PY1_201700988-master\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.pdb
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.csprojAssemblyReference.cache
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.Form1.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.Properties.Resources.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.csproj.GenerateResource.cache
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.exe
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.pdb
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.exe.config
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.exe
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\Parcial 2\Thompson\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.pdb
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.exe.config
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.exe
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\bin\Debug\OLC1_PY1_201700988.pdb
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.csprojAssemblyReference.cache
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.Form1.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.Properties.Resources.resources
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.csproj.GenerateResource.cache
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.exe
+C:\Users\loosc\OneDrive\Escritorio\USAC\VJUN2020\Compi1\[OCL1]PY1_201709140\OLC1_PY1_201700988\obj\Debug\OLC1_PY1_201700988.pdb
