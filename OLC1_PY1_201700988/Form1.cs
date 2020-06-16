@@ -20,6 +20,7 @@ namespace OLC1_PY1_201700988
     {
         int caracter = 0;
         scanner_201709140 scanner = new scanner_201709140();
+        parser_201709140 parser = new parser_201709140();
         private ArrayList listaErrores;
         private ArrayList listaTokens;
 
@@ -45,6 +46,7 @@ namespace OLC1_PY1_201700988
             erroresToolStripMenuItem.ForeColor = Color.White;
             arbolDeDerivacionToolStripMenuItem.ForeColor = Color.White;
             consultaYRemplazoToolStripMenuItem.ForeColor = Color.White;
+            buscarToolStripMenuItem.ForeColor = Color.White;
 
 
             menuStrip1.Renderer = new ToolStripProfessionalRenderer(new MyColorTable());
@@ -220,9 +222,7 @@ namespace OLC1_PY1_201700988
                         {
                             StreamWriter writer = new StreamWriter(saveFile.FileName);
                             writer.Write(controlBox.Text);
-                            writer.Close();
-
-                            String[] ruta = saveFile.FileName.Split('\\');
+                            writer.Close(); String[] ruta = saveFile.FileName.Split('\\');
                             rutaString = saveFile.FileName;
                             tabControl1.SelectedTab.ToolTipText = saveFile.FileName;
 
@@ -529,8 +529,9 @@ namespace OLC1_PY1_201700988
                         listaTokens = scanner.scannerMethod(a.SelectedText);
                         listaErrores = scanner.getErrores();
                         //ANALISIS SINTACTICP
-
-
+                        parser.limpiar();
+                        parser.parser(listaTokens);
+                        listaErrores.AddRange(parser.getErrores());
                         //CountryList1.AddRange(CountryList2);
                         Console.WriteLine(a.SelectedText.Length);
                         Console.WriteLine(a.Text.IndexOf(a.SelectedText));
@@ -556,6 +557,11 @@ namespace OLC1_PY1_201700988
                         {
                             if (linea == token.getFila())
                             {
+                                //a.AppendText("\n");
+                                //linea++;
+                            }
+                            while (linea < token.getFila())
+                            {
                                 a.AppendText("\n");
                                 linea++;
                             }
@@ -566,10 +572,10 @@ namespace OLC1_PY1_201700988
                                 a.AppendText(token.getLexema() + " ");
 
                             }
-                            else if(token.getToken() == 31 || token.getToken() == 32)//COMENTARIOS
+                            else if (token.getToken() == 31 || token.getToken() == 32)//COMENTARIOS
                             {
                                 a.SelectionColor = Color.Gray;
-                                a.AppendText(token.getLexema()+" ");
+                                a.AppendText(token.getLexema() + " ");
                             }
                             else if (token.getToken() == 35)//CADENAS
                             {
@@ -578,7 +584,7 @@ namespace OLC1_PY1_201700988
                             }
                             else if (token.getToken() == 37)//IDENTIFICADORES
                             {
-                                a.SelectionColor = Color.FromArgb(101, 67, 33); 
+                                a.SelectionColor = Color.FromArgb(101, 67, 33);
                                 a.AppendText(token.getLexema() + " ");
                             }
                             else if (token.getToken() == 33 || token.getToken() == 34)//Numeros
@@ -591,7 +597,7 @@ namespace OLC1_PY1_201700988
                                 a.SelectionColor = Color.Purple;
                                 a.AppendText(token.getLexema() + " ");
                             }
-                            else if (token.getToken() == 23 || token.getToken() == 24 || token.getToken() ==25 || token.getToken() == 26 || token.getToken() == 27 || token.getToken() == 28 || token.getToken() == 29)
+                            else if (token.getToken() == 23 || token.getToken() == 24 || token.getToken() == 25 || token.getToken() == 26 || token.getToken() == 27 || token.getToken() == 28 || token.getToken() == 29)
                             {
                                 a.SelectionColor = Color.Red;
                                 a.AppendText(token.getLexema() + " ");
@@ -642,13 +648,16 @@ namespace OLC1_PY1_201700988
                         listaTokens = scanner.scannerMethod(a.Text);
                         listaErrores = scanner.getErrores();
                         //ANALISIS SINTACTICP
-
+                        parser.limpiar();
+                        
+                        parser.parser(listaTokens);
+                        listaErrores.AddRange(parser.getErrores());
 
                         //CountryList1.AddRange(CountryList2);
-                        
+
                         //Pinto segun lo escaneado
-                        
-                        
+
+
                         int linea = 0;
 
                         a.Clear();
@@ -706,7 +715,7 @@ namespace OLC1_PY1_201700988
                             a.SelectionColor = Color.Black;
                         }
 
-                      
+
 
 
                         //Ejecuto codigo
@@ -756,7 +765,25 @@ namespace OLC1_PY1_201700988
 
         private void erroresToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
 
+
+
+            Control controlBox;
+            if (tabControl1.SelectedTab.HasChildren)
+            {
+                foreach (Control item in tabControl1.SelectedTab.Controls)
+                {
+                    controlBox = item;
+
+                    if (controlBox is RichTextBox)
+                    {
+                        reporteErrores(tabControl1.SelectedTab.Name);
+                        
+
+                    }
+                }
+            }
         }
 
         private void arbolDeDerivacionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -817,30 +844,73 @@ namespace OLC1_PY1_201700988
                     {
 
                         RichTextBox a = (RichTextBox)controlBox;
-
-
+                        String contenido = a.Text;
+                        String texto = a.SelectedText;
+                        int inicio = a.Text.IndexOf(a.SelectedText);
+                        int largo = a.SelectedText.Length;
                         String busqueda = Interaction.InputBox("Busqueda de palabra a reemplazar", "Busqueda", "Palabra", -1, -1);
-
-                        if (controlBox.Text.Contains(busqueda))
+                        if (contenido.Length == texto.Length || texto.Length == 0)
                         {
-                            //remplaza
-
-                            String remplazo = Interaction.InputBox("Palabra para reemplazar", "Reemplazo", "Palabra", -1, -1);
-
-                            QuickReplace(a, busqueda, remplazo);
-
-                            MessageBox.Show("Remplazo satisfactorio", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-
-
+                            //Reemplaza en todo
+                            if (controlBox.Text.Contains(busqueda))
+                            {
+                                //remplaza
+                                String remplazo = Interaction.InputBox("Palabra para reemplazar", "Reemplazo", "Palabra", -1, -1);
+                                QuickReplace(a, busqueda, remplazo);
+                                MessageBox.Show("Remplazo satisfactorio", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                //Mensaje que no se encontro la palabra
+                                MessageBox.Show("No se encontro la palabra que busca", "Error al reemplazar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                         else
                         {
-                            //Mensaje que no se encontro la palabra
-                            MessageBox.Show("No se encontro la palabra que busca", "Error al reemplazar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            //Remplazo en seleccionado
+
+
+                            String nuevo = "";
+                            if (contenido.Contains(busqueda))
+                            {
+                                a.Clear();
+                                Console.WriteLine("Contenido: " + contenido);
+                                Console.WriteLine("Seleccion:" + texto);
+                                String remplazo = Interaction.InputBox("Palabra para reemplazar", "Reemplazo", "Palabra", -1, -1);
+                                for (int i = 0; i < inicio; i++)
+                                {
+                                    nuevo += contenido[i].ToString();
+
+
+                                }
+                                texto = texto.Replace(busqueda, remplazo);
+
+                                nuevo += texto;
+
+                                for (int i = inicio + largo; i < contenido.Length; i++)
+                                {
+                                    nuevo += contenido[i].ToString();
+                                }
+                                a.Text = nuevo;
+
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("No se encontro la palabra que busca", "Error al reemplazar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+
+
+
 
                         }
+
+
+
+
+
+
 
                     }
                 }
@@ -851,37 +921,7 @@ namespace OLC1_PY1_201700988
             rtb.Text = rtb.Text.Replace(word, word2);
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Control controlBox;
-            if (tabControl1.SelectedTab.HasChildren)
-            {
-                foreach (Control item in tabControl1.SelectedTab.Controls)
-                {
-                    controlBox = item;
 
-                    if (controlBox is RichTextBox)
-                    {
-
-                        RichTextBox a = (RichTextBox)controlBox;
-                        a.AppendText("Alo");
-
-
-
-
-                        //Pinto segun lo escaneado
-
-                        //Ejecuto codigo
-
-
-
-
-                        //Cargar las expresiones regulares
-
-                    }
-                }
-            }
-        }
         public void reporteErrores(String archivo)
         {
             string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -960,6 +1000,65 @@ namespace OLC1_PY1_201700988
                 MessageBox.Show("Error al generar el reporte " + er.ToString(), "Error con reporte lexico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buscarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Control controlBox;
+            if (tabControl1.SelectedTab.HasChildren)
+            {
+                foreach (Control item in tabControl1.SelectedTab.Controls)
+                {
+                    controlBox = item;
+
+                    if (controlBox is RichTextBox)
+                    {
+
+                        RichTextBox a = (RichTextBox)controlBox;
+                        String contenido = a.Text;
+                        String texto = a.SelectedText;
+                        int inicio = a.Text.IndexOf(a.SelectedText);
+                        int largo = a.SelectedText.Length;
+                        String busqueda = Interaction.InputBox("Busqueda de palabra a reemplazar", "Busqueda", "Palabra", -1, -1);
+
+                        //Busca en todo
+                        if (controlBox.Text.Contains(busqueda))
+                        {
+                            int index = 0;
+                            String temp = a.Text;
+                            a.Text = "";
+                            a.Text = temp;
+                            while (index < a.Text.LastIndexOf(busqueda))
+                            {
+                                a.Find(busqueda, index, a.Text.Length, RichTextBoxFinds.None);
+                                a.SelectionBackColor = Color.FromArgb(12, 183, 242);
+                                index = a.Text.IndexOf(busqueda, index) + 1;
+
+
+                            }
+                        }
+                        else
+                        {
+                            //Mensaje que no se encontro la palabra
+                            MessageBox.Show("No se encontro la palabra que busca", "No encontrado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+
+
+
+                    }
+                }
+            }
+        }
+
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -350,7 +350,7 @@ namespace OLC1_PY1_201700988.Analizadores
                         }
                         break;
                     case 21:
-                        if (caracter == '.')
+                        if (Char.IsDigit( caracter))
                         {
                             estado = 22;
                             aux += caracter.ToString();
@@ -404,6 +404,7 @@ namespace OLC1_PY1_201700988.Analizadores
                         {
                             aux += caracter.ToString();
                             columna++;
+                            estado = 26;
                         }
                         else
                         {

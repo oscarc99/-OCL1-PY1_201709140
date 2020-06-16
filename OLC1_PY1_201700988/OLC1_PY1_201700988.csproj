@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analizadores\parser_201709140.cs" />
     <Compile Include="Analizadores\scanner_201709140.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
