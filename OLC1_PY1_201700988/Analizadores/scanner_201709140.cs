@@ -32,7 +32,7 @@ namespace OLC1_PY1_201700988.Analizadores
             int columna = 0;
 
             char caracter;
-            for (int i = 0; i < entrada.Length; i++)
+            for (int i = 0; i < entrada.Length-1; i++)
             {
                 caracter = entrada[i];
                 switch (estado)
@@ -177,8 +177,8 @@ namespace OLC1_PY1_201700988.Analizadores
                         }
                         else
                         {
-                            listaTokens.Add(new Token(29, "!", "NOT", fila, columna));
-
+                            //listaTokens.Add(new Token(29, "!", "NOT", fila, columna));
+                            listaErrores.Add(new Error("Error Lexico", "Caracter no pertenece al lenguaje", "!", fila, columna));
 
                             estado = 0;
                             i--;

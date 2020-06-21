@@ -23,6 +23,7 @@ namespace OLC1_PY1_201700988
         parser_201709140 parser = new parser_201709140();
         private ArrayList listaErrores;
         private ArrayList listaTokens;
+        private ArrayList listaTablas;
 
         public Form1()
         {
@@ -47,7 +48,9 @@ namespace OLC1_PY1_201700988
             arbolDeDerivacionToolStripMenuItem.ForeColor = Color.White;
             consultaYRemplazoToolStripMenuItem.ForeColor = Color.White;
             buscarToolStripMenuItem.ForeColor = Color.White;
-
+            listaTablas = new ArrayList();
+            listaErrores = new ArrayList();
+            listaTokens = new ArrayList();
 
             menuStrip1.Renderer = new ToolStripProfessionalRenderer(new MyColorTable());
 
@@ -530,7 +533,7 @@ namespace OLC1_PY1_201700988
                         listaErrores = scanner.getErrores();
                         //ANALISIS SINTACTICP
                         parser.limpiar();
-                        parser.parser(listaTokens);
+                        bool error = parser.parser(listaTokens);
                         listaErrores.AddRange(parser.getErrores());
                         //CountryList1.AddRange(CountryList2);
                         Console.WriteLine(a.SelectedText.Length);
@@ -617,8 +620,21 @@ namespace OLC1_PY1_201700988
                             a.AppendText(contenido[i].ToString());
                         }
 
+                        if (error)//Si no tiene errores
+                        {
+                            //Ejecuto codigo
+                            crear();
+                            insertar();
+                            eliminar();
+                            actualizar();
+                            seleccionar();
 
-                        //Ejecuto codigo
+                        }
+                        else
+                        {
+                            MessageBox.Show("Corriga errores sintacticos", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
 
 
 
@@ -629,6 +645,828 @@ namespace OLC1_PY1_201700988
                 }
             }
         }
+
+        private void seleccionar()
+        {
+            foreach (Token token in listaTokens)
+            {
+                if (token.getToken() == 9)//Si encuentra la palabra seleccionar
+                {
+
+                }
+            }
+        }
+
+        private void actualizar()
+        {
+            int posicion = 0;
+            foreach (Token token in listaTokens)
+            {
+                if (token.getToken() == 16)//Si encuentra la palabra actualizar
+                {
+                    ArrayList listaActualizar = new ArrayList();
+                    int nombreP = posicion + 1;
+                    Token nombre = (Token)listaTokens[nombreP];
+                    int par=0;
+                    //Obtengo columnas a cambiar
+                    for (int i = nombreP; i < listaTokens.Count; i++)
+                    {
+                        Token temp = (Token)listaTokens[i];
+                        if (temp.getToken() ==22)//Parentesis que cierra TERMINA VALORES A CAMBIAR
+                        {
+                            par = i;
+                            break;
+                        }else if (temp.getToken()==24)
+                        {
+                            Token columna = (Token)listaTokens[i-1];
+                            Token valor = (Token)listaTokens[i+1];
+                            actualizar a = new actualizar(columna.getLexema(), valor.getLexema());
+                            listaActualizar.Add(a);
+                        }
+
+                        
+
+                    }
+
+                    foreach (Tabla table in listaTablas)
+                    {
+
+                        
+                        if (nombre.getLexema().ToUpper() == table.getNombre())
+                        {
+                            //Esta en la tabla que va a eliminar
+                            Token te = (Token)listaTokens[par+1];
+                            if (te.getToken() == 20)//Si es ; 
+                            {
+                                //Debo de cambiar todos los atributos a establecer (actualizar todo)
+                                foreach(Registro re in table.getRegistros())
+                                {
+                                    foreach (actualizar ac in listaActualizar)
+                                    {
+                                        foreach (Atributo atri in re.getAtributo()) 
+                                        {
+                                            if (ac.getCol().ToUpper().Equals(atri.getNombre().ToUpper()))
+                                            {
+                                                atri.setAtribute(ac.getVal());
+                                            }
+                                        }
+                                    }
+                                }
+
+                                
+                            }
+                            else
+                            {
+                                //Obetengo condiciones
+                                ArrayList listaCondiciones = new ArrayList(); //Condiciones con || 
+
+
+
+                                Condiciones condition = new Condiciones();//Agrego condicion para el && 
+
+
+                                Condicion nueva = new Condicion();
+
+                                //Consigo las condiciones
+                                for (int i = par; i < listaTokens.Count; i++)
+                                {
+                                    Token tok = (Token)listaTokens[i];
+                                    if (tok.getToken() == 20)//Si es ; 
+                                    {
+                                        listaCondiciones.Add(condition);
+                                        //Agrego condiciones a la lista
+                                        //Detengo ya termino de guardar condiciones
+                                        break;
+                                    }
+                                    else if (tok.getToken() >= 23 && tok.getToken() <= 28)
+                                    {
+                                        //Creo la nueva condiciones
+                                        Token columna = (Token)listaTokens[i - 1];
+                                        Token valor = (Token)listaTokens[i + 1];
+                                        if (valor.getToken() == 37)
+                                        {
+                                            nueva = new Condicion(table.getNombre().ToUpper(), columna.getLexema().ToUpper(), tok.getToken(), valor.getToken(), table.getNombre().ToUpper(), valor.getLexema().ToUpper());
+                                            condition.addC(nueva);
+
+                                        }
+                                        else
+                                        {
+
+                                            nueva = new Condicion(table.getNombre().ToUpper(), columna.getLexema().ToUpper(), tok.getToken(), valorT(valor.getToken()), valor.getLexema());
+                                            condition.addC(nueva);
+                                        }
+
+
+                                    }
+                                    else if (tok.getToken() == 13 || tok.getToken() == 14)
+                                    {
+                                        if (tok.getToken() == 13)//Y
+                                        {
+                                            //condition.addC(nueva);
+                                        }
+                                        else if (tok.getToken() == 14)//O
+                                        {
+                                            listaCondiciones.Add(condition);
+                                            condition = new Condiciones();
+
+                                        }
+                                        //Agrego 
+                                        //Creo o agrego mas condiciones
+
+                                    }
+
+                                }
+                                //Posicion del registro de la tabla
+
+                                //Ya obtenbe condiciones ahora debo elimiar segun condiciones
+
+                                //Si cumple modifico en el indice i
+                                Console.WriteLine("");
+                                foreach(Registro r in table.getRegistros())
+                                {
+                                    //Registro r = (Registro)table.getRegistros()[i];
+                                    
+                                    foreach (Condiciones cons in listaCondiciones)
+                                    {
+
+                                        foreach (Condicion con in cons.getCondiciones())
+                                        {
+                                            String columna = con.getColumna();
+                                            int compara = con.getCompara();
+
+
+                                            foreach (Atributo at in r.getAtributo())
+                                            {
+                                                if (at.getNombre().ToUpper().Equals(columna.ToUpper()))
+                                                {
+                                                    if (at.getTipo() == 0)//Entero
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if ((int)at.getValor() != (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if ((int)at.getValor() == (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if ((int)at.getValor() <= (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if ((int)at.getValor() < (int)con.getValor())
+                                                            {
+                                                                foreach (actualizar ac in listaActualizar)
+                                                                {
+                                                                    con.setEstado(true);
+                                                                }
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if ((int)at.getValor() >= (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if ((int)at.getValor() > (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (at.getTipo() == 1)//Cadena
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if (!at.getValor().ToString().Equals(con.getValor().ToString()))
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if (at.getValor().ToString().Equals(con.getValor().ToString()))
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if (at.getValor().ToString().Length <= con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if (at.getValor().ToString().Length < con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if (at.getValor().ToString().Length >= con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if (at.getValor().ToString().Length > con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (at.getTipo() == 2)//flotante
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if ((double)at.getValor() != (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if ((double)at.getValor() == (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if ((double)at.getValor() <= (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if ((double)at.getValor() < (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if ((double)at.getValor() >= (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if ((double)at.getValor() > (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (at.getTipo() == 3)//fecha
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if ((DateTime)at.getValor() != (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if ((DateTime)at.getValor() == (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if ((DateTime)at.getValor() <= (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if ((DateTime)at.getValor() < (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if ((DateTime)at.getValor() >= (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if ((DateTime)at.getValor() > (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+
+
+                                                }
+
+                                            }
+                                            if (cons.getEstado())
+                                            {
+                                                foreach (actualizar ac in listaActualizar)
+                                                {
+                                                    foreach (Atributo atri in r.getAtributo())
+                                                    {
+                                                        if (ac.getCol().ToUpper().Equals(atri.getNombre().ToUpper()))
+                                                        {
+                                                            atri.setAtribute(ac.getVal());
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        foreach (Condiciones c in listaCondiciones)
+                                        {
+                                            c.falso();
+                                            c.setEstado(false);
+                                        }
+
+                                    }
+                                   
+
+                                }
+
+
+
+
+
+                            }
+
+
+                        }
+
+
+
+                    }
+
+
+
+
+
+
+                }
+                posicion++;
+            }
+        }
+
+        private void eliminar()
+        {
+
+            int posicion = 0;
+            foreach (Token token in listaTokens)
+            {
+                if (token.getToken() == 15)//Si encuentra la palabra eliminar
+                {
+                    int nombreP = posicion + 2;
+                    Token t = (Token)listaTokens[nombreP];
+
+                    foreach (Tabla table in listaTablas)
+                    {
+
+                        Token te = (Token)listaTokens[nombreP + 1];
+                        if (t.getLexema().ToUpper() == table.getNombre())
+                        {
+                            //Esta en la tabla que va a eliminar
+
+                            if (te.getToken() == 20)//Si es ; 
+                            {
+                                //No tiene condiciones elimino todos los datos
+                                table.eliminar();
+                            }
+                            else
+                            {
+                                //Obetengo condiciones
+                                ArrayList listaCondiciones = new ArrayList(); //Condiciones con || 
+
+
+
+                                Condiciones condition = new Condiciones();//Agrego condicion para el && 
+
+
+                                Condicion nueva = new Condicion();
+
+                                //Consigo las condiciones
+                                for (int i = nombreP; i < listaTokens.Count; i++)
+                                {
+                                    Token tok = (Token)listaTokens[i];
+                                    if (tok.getToken() == 20)//Si es ; 
+                                    {
+                                        listaCondiciones.Add(condition);
+                                        //Agrego condiciones a la lista
+                                        //Detengo ya termino de guardar condiciones
+                                        break;
+                                    }
+                                    else if (tok.getToken() >= 23 && tok.getToken() <= 28)
+                                    {
+                                        //Creo la nueva condiciones
+                                        Token columna = (Token)listaTokens[i - 1];
+                                        Token valor = (Token)listaTokens[i + 1];
+                                        if (valor.getToken() == 37)
+                                        {
+                                            nueva = new Condicion(table.getNombre().ToUpper(), columna.getLexema().ToUpper(), tok.getToken(), valor.getToken(), table.getNombre().ToUpper(), valor.getLexema().ToUpper());
+                                            condition.addC(nueva);
+
+                                        }
+                                        else
+                                        {
+
+                                            nueva = new Condicion(table.getNombre().ToUpper(), columna.getLexema().ToUpper(), tok.getToken(), valorT(valor.getToken()), valor.getLexema());
+                                            condition.addC(nueva);
+                                        }
+
+
+                                    }
+                                    else if (tok.getToken() == 13 || tok.getToken() == 14)
+                                    {
+                                        if (tok.getToken() == 13)//Y
+                                        {
+                                            //condition.addC(nueva);
+                                        }
+                                        else if (tok.getToken() == 14)//O
+                                        {
+                                            listaCondiciones.Add(condition);
+                                            condition = new Condiciones();
+
+                                        }
+                                        //Agrego 
+                                        //Creo o agrego mas condiciones
+
+                                    }
+
+                                }
+                                //Posicion del registro de la tabla
+
+                                //Ya obtenbe condiciones ahora debo elimiar segun condiciones
+
+                                //Si cumple elimino en el indice i
+                                for (int i = 0; i < table.getRegistros().Count; i++)
+                                {
+                                    Registro r = (Registro)table.getRegistros()[i];
+                                    bool elimino = false;
+                                    foreach (Condiciones cons in listaCondiciones)
+                                    {
+
+                                        foreach (Condicion con in cons.getCondiciones())
+                                        {
+                                            String columna = con.getColumna();
+                                            int compara = con.getCompara();
+                                            
+                                            
+                                            foreach (Atributo at in r.getAtributo())
+                                            {
+                                                if (at.getNombre().ToUpper().Equals(columna.ToUpper()))
+                                                {
+                                                    if (at.getTipo() == 0)//Entero
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if ((int)at.getValor()!=(int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if ((int)at.getValor() == (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if ((int)at.getValor() <= (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if ((int)at.getValor() < (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if ((int)at.getValor() >= (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if ((int)at.getValor() > (int)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (at.getTipo() == 1)//Cadena
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if (!at.getValor().ToString().Equals(con.getValor().ToString()))
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if (at.getValor().ToString().Equals(con.getValor().ToString()))
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if (at.getValor().ToString().Length <= con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if (at.getValor().ToString().Length < con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if (at.getValor().ToString().Length >= con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if (at.getValor().ToString().Length > con.getValor().ToString().Length)
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (at.getTipo() == 2)//flotante
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if ((double)at.getValor() != (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if ((double)at.getValor() == (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if ((double)at.getValor() <= (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if ((double)at.getValor() < (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if ((double)at.getValor() >= (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if ((double)at.getValor() > (double)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (at.getTipo() == 3)//fecha
+                                                    {
+                                                        if (compara == 23)//Diferente
+                                                        {
+                                                            if ((DateTime)at.getValor() != (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 24)//igual
+                                                        {
+                                                            if ((DateTime)at.getValor() == (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 25)//menor o igual
+                                                        {
+                                                            if ((DateTime)at.getValor() <= (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 26)//menor
+                                                        {
+                                                            if ((DateTime)at.getValor() < (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 27)//mayor igual
+                                                        {
+                                                            if ((DateTime)at.getValor() >= (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                        else if (compara == 28)//mayor
+                                                        {
+                                                            if ((DateTime)at.getValor() > (DateTime)con.getValor())
+                                                            {
+                                                                con.setEstado(true);
+                                                            }
+                                                        }
+                                                    }
+
+
+                                                }
+
+                                            }
+                                        }
+
+
+                                        if (cons.getEstado())
+                                        {
+                                            table.eliminar(i);
+                                            elimino = true;
+                                        }
+                                    }
+                                    if (elimino)
+                                    {
+                                        i--;
+                                    }
+                                    foreach (Condiciones c in listaCondiciones)
+                                    {
+                                        c.falso();
+                                        c.setEstado(false);
+                                    }
+                                    
+                                }
+
+
+
+                                
+
+                            }
+
+
+                        }
+                        
+
+
+                    }
+
+
+
+
+                    
+                }
+                //Posicion del token
+                posicion++;
+            }
+        }
+
+
+        private void insertar()
+        {
+            int posicion = 0;
+            foreach (Token token in listaTokens)
+            {
+                if (token.getToken() == 6)//Si encuentra la palabra insertar
+                {
+                    int nombreP = posicion + 2;
+                    Token t = (Token)listaTokens[nombreP];
+                    foreach (Tabla table in listaTablas)
+                    {
+
+                        if (table.getNombre().Equals(t.getLexema().ToUpper()))
+                        {
+                            Registro caract = table.getCaracteristicas();
+                            int atributo = 0;
+                            Registro nuevo = new Registro();
+
+                            for (int i = nombreP; i < listaTokens.Count; i++)
+                            {
+                                Token temp = (Token)listaTokens[i];
+                                Token dato = (Token)listaTokens[i - 1];
+                                Atributo cabeza = (Atributo)caract.getAtributo()[atributo];
+
+                                if (temp.getToken() == 22)//Parentesis que cierra
+                                {
+
+                                    nuevo.addAtribute(new Atributo(cabeza.getNombre().ToUpper(), cabeza.getTipo(), dato.getLexema()));
+                                    break;
+                                }
+                                else if (temp.getToken() == 19)//Si es coma creao atributos del registro caracteristica
+                                {
+                                    nuevo.addAtribute(new Atributo(cabeza.getNombre().ToUpper(), cabeza.getTipo(), dato.getLexema()));
+                                    atributo++;
+                                }
+
+
+
+                            }
+                            table.addRegistro(nuevo);
+
+                            //Estoy en la tabla debo agregar un registro
+                        }
+                    }
+
+                }
+                posicion++;
+            }
+        }
+
+        private void crear()
+        {
+            int posicion = 0;
+            foreach (Token token in listaTokens)
+            {
+
+                if (token.getToken() == 4)//Si encuentra la palabra crear
+                {
+                    int nombreP = posicion + 2;
+                    Token t = (Token)listaTokens[nombreP];
+                    String name = t.getLexema().ToUpper();
+                    Tabla nueva = new Tabla(name);
+                    Console.WriteLine("-------------");
+                    Console.WriteLine(name);
+                    //Con este detecta el nombre
+                    Registro caracteristica = new Registro();
+                    for (int i = nombreP; i < listaTokens.Count; i++)
+                    {
+                        Token temp = (Token)listaTokens[i];
+                        if (temp.getToken() == 22)//Parentesis que cierra
+                        {
+                            Token tipo = (Token)listaTokens[i - 1];
+                            Token variable = (Token)listaTokens[i - 2];
+
+                            caracteristica.addAtribute(new Atributo(variable.getLexema().ToUpper(), tipo.getToken()));
+                            break;
+                        }
+                        else if (temp.getToken() == 19)//Si es coma creao atributos del registro caracteristica
+                        {
+                            Token tipo = (Token)listaTokens[i - 1];
+                            Token variable = (Token)listaTokens[i - 2];
+
+                            caracteristica.addAtribute(new Atributo(variable.getLexema().ToUpper(), tipo.getToken()));
+                        }
+                    }
+                    nueva.setCaracteristica(caracteristica);
+                    listaTablas.Add(nueva);
+
+                }
+                posicion++;
+            }
+        }
+
+
 
         private void cargarTablasToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -649,7 +1487,7 @@ namespace OLC1_PY1_201700988
                         listaErrores = scanner.getErrores();
                         //ANALISIS SINTACTICP
                         parser.limpiar();
-                        
+
                         parser.parser(listaTokens);
                         listaErrores.AddRange(parser.getErrores());
 
@@ -732,7 +1570,7 @@ namespace OLC1_PY1_201700988
 
         private void verTablasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            reporteTablas("Memoria");
         }
 
         private void mostrarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -765,7 +1603,7 @@ namespace OLC1_PY1_201700988
 
         private void erroresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
 
 
 
@@ -779,7 +1617,7 @@ namespace OLC1_PY1_201700988
                     if (controlBox is RichTextBox)
                     {
                         reporteErrores(tabControl1.SelectedTab.Name);
-                        
+
 
                     }
                 }
@@ -788,7 +1626,7 @@ namespace OLC1_PY1_201700988
 
         private void arbolDeDerivacionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            arbol();
         }
 
 
@@ -1002,9 +1840,160 @@ namespace OLC1_PY1_201700988
 
         }
 
+        public void reporteTablas(String archivo)
+        {
+            string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            string pathFolder = pathDesktop + "\\Proyecto1\\" + archivo + "_201709140\\";
+
+            try
+            {
+                //Existe el directorio para el archivo, sino crearlo
+                if (!Directory.Exists(pathFolder))
+                {
+                    DirectoryInfo dir = Directory.CreateDirectory(pathFolder);
+                }
+
+                //Crear el reporte
+                string pathRep = pathFolder + "\\Tablas_" + archivo + ".html";
+                StreamWriter repHtml = new StreamWriter(pathRep);
+
+
+                //Escribir la tabla html
+                repHtml.WriteLine("<!DOCTYPE html>");
+                repHtml.WriteLine("<html>");
+                repHtml.WriteLine("<head>");
+                repHtml.WriteLine("<title>Tablas</title>");
+                repHtml.WriteLine("<meta charset=\"utf-8\">");
+                repHtml.WriteLine("<h1 style=\"text-align:center\">Universidad de San Carlos de Guatemala</h1>");
+                repHtml.WriteLine("<h2 style=\"text-align: center\">Organizacion de lenguajes y compiladores 1</h2>");
+                repHtml.WriteLine("<h4 style=\"text-align: center\">Oscar Armin Crisóstomo Ruiz - 201709140</h4>");
+                repHtml.WriteLine("</head>");
+                repHtml.WriteLine("<body>");
+                repHtml.WriteLine("<center>");
+                foreach (Tabla table in listaTablas)
+                {
+                    repHtml.WriteLine("<br>");
+                    repHtml.WriteLine("<table border=\"1\" style=\"width:60%\">");
+                    repHtml.WriteLine("<caption><h3>Tabla " + table.getNombre() + "</h3></caption>");
+                    repHtml.WriteLine("<colgroup>");
+                    repHtml.WriteLine("<col style=\"width: 10% \"/>");
+                    repHtml.WriteLine("<col style=\"width: 20% \"/>");
+                    repHtml.WriteLine("<col style=\"width: 70% \"/>");
+                    repHtml.WriteLine("</colgroup>");
+                    repHtml.WriteLine("<thead>");
+
+                    repHtml.WriteLine("<tr>");
+                    foreach (Atributo atr in table.getCaracteristicas().getAtributo())
+                    {
+                        repHtml.WriteLine("<th >" + atr.getNombre() + "</th>");
+                    }
+
+                    repHtml.WriteLine("</tr>");
+                    repHtml.WriteLine("</thead>");
+                    repHtml.WriteLine("<tfoot>");
+                    repHtml.WriteLine("<tr>");
+                    repHtml.WriteLine("<td colspan=\"" + table.getCaracteristicas().getAtributo().Count + "\">Fin tabla</td>");
+                    repHtml.WriteLine("</tr>");
+                    repHtml.WriteLine("</tfoot>");
+                    repHtml.WriteLine("<tbody>");
+
+                    foreach (Registro item in table.getRegistros())
+                    {
+                        repHtml.WriteLine("<tr>");
+                        foreach (Atributo at in item.getAtributo())
+                        {
+                            repHtml.WriteLine("<td>" + at.getValor().ToString() + "</td>");
+
+                        }
+                        repHtml.WriteLine("</tr>");
+
+
+                    }
+
+                    repHtml.WriteLine("</tbody>");
+                    repHtml.WriteLine("</table>");
+
+                }
+
+                repHtml.WriteLine("</center>");
+                repHtml.WriteLine("</body>");
+                repHtml.WriteLine("</html>");
+
+                repHtml.Close();
+                System.Diagnostics.Process.Start(pathRep);
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show("Error al generar tablas " + er.ToString(), "Error con reporte lexico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        public void arbol()
+        {
+            string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            string pathFolder = pathDesktop + "\\Proyecto1\\Arbol_201709140\\";
+
+            try
+            {
+                //Existe el directorio para el archivo, sino crearlo
+                if (!Directory.Exists(pathFolder))
+                {
+                    DirectoryInfo dir = Directory.CreateDirectory(pathFolder);
+                }
+
+                //Crear el reporte
+                string pathRep = pathFolder + "\\arbol.dot";
+                string image = pathFolder + "\\arbol.png";
+                StreamWriter repHtml = new StreamWriter(pathRep);
+                repHtml.WriteLine(parser.getDot());
+
+                repHtml.Close();
+                //dot -Tpng graph.dot -o graph.png 
+
+                
+                System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", "/c dot -Tpng -o " + image +" " + pathRep);
+                
+                procStartInfo.RedirectStandardOutput = true;
+                procStartInfo.UseShellExecute = false;
+                //Indica que el proceso no despliegue una pantalla negra (El proceso se ejecuta en background)
+                procStartInfo.CreateNoWindow = false;
+                //Inicializa el proceso
+                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                proc.StartInfo = procStartInfo;
+                proc.Start();
+                //System.Diagnostics.Process.Start(image);
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show("Error al generar tablas " + er.ToString(), "Error con reporte lexico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+
+        private int valorT(int token)
+        {
+            if (token == 33)//Entero
+            {
+                return 0;
+            }
+            else if (token == 34)//Flotante
+            {
+                return 2;
+            }
+            else if (token == 35)//Candena
+            {
+                return 1;
+            }
+            else if (token == 36)//Fecha
+            {
+                return 3;
+            }
+            return 1;
         }
 
         private void buscarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1059,6 +2048,28 @@ namespace OLC1_PY1_201700988
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Object ob;
+            Object ob1;
+            String a = parser.getDot();
+            Console.WriteLine(a);
+            
+            DateTime fecha = Convert.ToDateTime("15/06/2020");
+            DateTime fecha1 = Convert.ToDateTime("19/06/2020");
+
+            ob = fecha;
+            ob1 = fecha1;
+
+
+            if ((DateTime)ob < (DateTime)ob1)
+            {
+                Console.WriteLine("---");
+            }
+
+            Console.WriteLine("---");
         }
     }
 }

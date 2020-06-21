@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace OLC1_PY1_201700988.Analizadores
 {
@@ -13,6 +14,9 @@ namespace OLC1_PY1_201700988.Analizadores
         private int posicion;
         private ArrayList errores;
         private ArrayList tokens;
+        String dir="";
+        String dot= "digraph G { \n"+
+        "node[shape = circle fontname = Arial]; \n";
         public ArrayList getTokens()
         {
             return tokens;
@@ -26,12 +30,18 @@ namespace OLC1_PY1_201700988.Analizadores
 
         public parser_201709140()
         {
+            dot = "digraph G { \n" +
+       "node[shape = circle fontname = Arial]; \n";
+            dir = "";
             this.errores = new ArrayList();
             this.tokens = new ArrayList();
             this.posicion = 0;
         }
         public parser_201709140(ArrayList tokens) 
         {
+            dot = "digraph G { \n" +
+       "node[shape = circle fontname = Arial]; \n";
+            dir = "";
             this.tokens = tokens;
             this.errores = new ArrayList();
             this.posicion = 0;
@@ -41,6 +51,9 @@ namespace OLC1_PY1_201700988.Analizadores
         {
             tokens.Clear();
             errores.Clear();
+            dot = "digraph G { \n" +
+      "node[shape = circle fontname = Arial]; \n";
+            dir = "";
         }
 
 
@@ -51,52 +64,90 @@ namespace OLC1_PY1_201700988.Analizadores
             this.tokens = tokens;
             if (tokens.Count!=0)
             {
-                inicio();
+                dot += "node" + 0 + " [label=\"INICIO\"]; \n";
+                inicio("0");
+                
             }
             
             return errores.Count==0;
         }
 
-        public void inicio()
+        public void inicio(String pos)
         {
             if (posicion <= tokens.Count-1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 4)//Crear
                 {
-                    C();
+                    
+                    dot += "node" + pos + "1 [label=\"C\"]; \n";
+                    C(pos+"1");
+
+                    dot += "node" + pos + "2 [label=\";\"]; \n";
                     match(20);//;
-                    inicio();
+                    
+                    dot += "node" + pos + "3 [label=\"INICIO\"]; \n";
+                    inicio(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
                 }
                 else if (temp.getToken() == 6)//INSERTAR
                 {
-                    I();
+                    dot += "node" + pos + "1 [label=\"I\"]; \n";
+                    I(pos+"1");
+                    dot += "node" + pos + "2 [label=\";\"]; \n";
                     match(20);//;
-                    inicio();
+                    dot += "node" + pos + "3 [label=\"INICIO\"]; \n";
+                    inicio(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
                 }
                 else if (temp.getToken() == 9)//SELECCIONAR
                 {
-                    S();
+                    dot += "node" + pos + "1 [label=\"S\"]; \n";
+                    S(pos+"1");
+                    dot += "node" + pos + "2 [label=\";\"]; \n";
                     match(20);//;
-                    inicio();
+                    dot += "node" + pos + "3 [label=\"INICIO\"]; \n";
+                    inicio(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
                 }
                 else if (temp.getToken() == 15)//ELIMINAR
                 {
-                    E();
+                    dot += "node" + pos + "1 [label=\"E\"]; \n";
+                    E(pos+"1");
+                    dot += "node" + pos + "2 [label=\";\"]; \n";
                     match(20);//;
-                    inicio();
+                    dot += "node" + pos + "3 [label=\"INICIO\"]; \n";
+                    inicio(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
                 }
                 else if (temp.getToken() == 16)//ACTUALIZAR
                 {
-                    A();
+                    dot += "node" + pos + "1 [label=\"A\"]; \n";
+                    A(pos+"1");
+                    dot += "node" + pos + "2 [label=\";\"]; \n";
                     match(20);//;
-                    inicio();
+                    dot += "node" + pos + "3 [label=\"INICIO\"]; \n";
+                    inicio(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+
                 }
                 else
                 {
                     if (posicion == tokens.Count)
                     {
                         //Esta al final ya no vienen mas
+                        dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                        dir += "node" + pos + "-> node" + pos + "1;\n";
                     }
                     else
                     {
@@ -109,39 +160,102 @@ namespace OLC1_PY1_201700988.Analizadores
             }
             
         }
-
-        private void I()
+        public String getDot()
         {
+            dot += "\n" + dir;
+            dot += "}";
+            return dot;
+        }
+
+        public String valor()
+        {
+            if (posicion <= tokens.Count - 1)
+            {
+                Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 35)//Cadena
+                {
+                    return convertir(temp.getLexema());
+                }
+                else
+                {
+                    return temp.getLexema();
+                }
+
+                
+
+
+            }
+            return "";
+        }
+        private String convertir(string dato)
+        {
+            String valor = "";
+            for (int i = 1; i < dato.Length - 1; i++)
+            {
+                valor += dato[i].ToString();
+            }
+            return valor;
+        }
+
+        private void I(String pos)
+        {
+            dot += "node" + pos + "1 [label=\""+valor()+"\"]; \n";
             match(6);//Insertar
+            dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
             match(7);//EN
+            dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
+            dot += "node" + pos + "4 [label=\"" + valor() + "\"]; \n";
             match(8);//VALORES
+            dot += "node" + pos + "5 [label=\"" + valor() + "\"]; \n";
             match(21);//(
-            VALORES_();
+            dot += "node" + pos + "6 [label=\"VALORES'\"]; \n";
+            VALORES_(pos+"6");
+            dot += "node" + pos + "7 [label=\"" + valor() + "\"]; \n";
             match(22);//)
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
+            dir += "node" + pos + "-> node" + pos + "4;\n";
+            dir += "node" + pos + "-> node" + pos + "5;\n";
+            dir += "node" + pos + "-> node" + pos + "6;\n";
+            dir += "node" + pos + "-> node" + pos + "7;\n";
 
         }
 
-        private void VALORES_()
+        private void VALORES_(String pos)
         {
-            VALOR();
-            VALOR_();
+            dot += "node" + pos + "1 [label=\"VALOR\"]; \n";
+            VALOR(pos+"1");
+            dot += "node" + pos + "2 [label=\"VALOR'\"]; \n";
+            VALOR_(pos + "2");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
         }
 
-        private void VALOR_()
+        private void VALOR_(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)
                 {
+                    dot += "node" + pos + "1 [label=\"" + temp.getLexema() + "\"]; \n";
                     match(19);//,
-                    VALOR();
-                    VALOR_();
+                    dot += "node" + pos + "2 [label=\"VALOR\"]; \n";
+                    VALOR(pos+"2");
+                    dot += "node" + pos + "3 [label=\"VALOR'\"]; \n";
+                    VALOR_(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    
                 }
                 else
                 {
                     //EPSILON
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 
             }
@@ -154,28 +268,40 @@ namespace OLC1_PY1_201700988.Analizadores
 
         }
 
-        private void VALOR()
+        private void VALOR(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken()==33)//ENTERO
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(33);
-                }else if (temp.getToken() == 34)//FLOTANTE
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                }
+                else if (temp.getToken() == 34)//FLOTANTE
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(34);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 35)//CADENA
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(35);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 36)//FECHAR
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(36);
-                }else if (temp.getToken() == 37)
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                }
+                else if (temp.getToken() == 37)
                 {
-                    ID_();
+                    dot += "node" + pos + "1 [label=\"ID'\"]; \n";
+                    ID_(pos+"1");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else
                 {
@@ -191,32 +317,55 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void S()
+        private void S(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(9);//SELECCIONAR
-            COLUMNAS();
+            dot += "node" + pos + "2 [label=\"COLUMNAS\"]; \n";
+            COLUMNAS(pos+"2");
+            dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
             match(11);//DE
-            TABLAS();
-            CONDICIONES();
+            dot += "node" + pos + "4 [label=\"TABLAS\"]; \n";
+            TABLAS(pos+"4");
+            dot += "node" + pos + "5 [label=\"CONDICIONES\"]; \n";
+            CONDICIONES(pos+"5");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
+            dir += "node" + pos + "-> node" + pos + "4;\n";
+            dir += "node" + pos + "-> node" + pos + "5;\n";
         }
 
-        private void CONDICIONES()
+        private void CONDICIONES(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 12)//DONDE
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(12);//DONDE
-                    ID_();
-                    COMPARACION();//Signos de comparacion
-                    VALOR();
-                    CONDICION();
+                    dot += "node" + pos + "2 [label=\"ID'\"]; \n";
+                    ID_(pos+"2");
+                    dot += "node" + pos + "3 [label=\"COMPARACION\"]; \n";
+                    COMPARACION(pos+"3");//Signos de comparacion
+                    dot += "node" + pos + "4 [label=\"VALOR\"]; \n";
+                    VALOR(pos+"4");
+                    dot += "node" + pos + "5 [label=\"CONDICION\"]; \n";
+                    CONDICION(pos+ "5");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    dir += "node" + pos + "-> node" + pos + "4;\n";
+                    dir += "node" + pos + "-> node" + pos + "5;\n";
+
 
                 }
                 else
                 {
-//                    errores.Add(new Error("Error sintactico", "Se esperaba condicion/es DONDE + la condicion",temp.getLexema(), temp.getFila(), temp.getColumna()));
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    //                    errores.Add(new Error("Error sintactico", "Se esperaba condicion/es DONDE + la condicion",temp.getLexema(), temp.getFila(), temp.getColumna()));
                 }
 
 
@@ -229,27 +378,36 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void ID_()
+        private void ID_(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(37);//id
-            ID__();
+            dot += "node" + pos + "2 [label=\"ID''\"]; \n";
+            ID__(pos+"2");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
         }
 
-        private void ID__()
+        private void ID__(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 30)//.
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(30);//.
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(37);//id
-
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
 
                 }
                 else
                 {
-                    
+                    //EPSILON
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
 
@@ -262,7 +420,7 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void CONDICION()
+        private void CONDICION(String pos)
         {
 
             if (posicion <= tokens.Count - 1)
@@ -270,16 +428,28 @@ namespace OLC1_PY1_201700988.Analizadores
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 13 || temp.getToken() ==  14)// Y/O
                 {
-                    CONDICION_();
-                    ID_();
-                    COMPARACION();//Signos de comparacion
-                    VALOR();
-                    CONDICION();
+                    dot += "node" + pos + "1 [label=\"CONDICION'\"]; \n";
+                    CONDICION_(pos+"1");
+                    dot += "node" + pos + "2 [label=\"ID'\"]; \n";
+                    ID_(pos+"2");
+                    dot += "node" + pos + "3 [label=\"COMPARACION\"]; \n";
+                    COMPARACION(pos+"3");//Signos de comparacion
+                    dot += "node" + pos + "4 [label=\"VALOR\"]; \n";
+                    VALOR(pos+"4");
+                    dot += "node" + pos + "5 [label=\"CONDICION\"]; \n";
+                    CONDICION(pos+"5");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    dir += "node" + pos + "-> node" + pos + "4;\n";
+                    dir += "node" + pos + "-> node" + pos + "5;\n";
+                    
 
                 }
                 else
                 {
-                    
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
 
@@ -292,18 +462,24 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void CONDICION_()
+        private void CONDICION_(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
+
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 13)//Y
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(13);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+
                 }
                 else if (temp.getToken() == 14)//O
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(14);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 
 
@@ -322,37 +498,52 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void COMPARACION()
+        private void COMPARACION(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 23)//!=
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(23);
-                }else if (temp.getToken() == 24)//=
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                }
+                else if (temp.getToken() == 24)//=
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(24);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 25)//<=
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(25);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 26)//<
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(26);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 27)//>=
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(27);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 28)//>
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(28);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 29)//!
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(29);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
                 else
@@ -370,28 +561,42 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void TABLAS()
+        private void TABLAS(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
-            TABLAS_();
+            dot += "node" + pos + "2 [label=\"TABLAS'\"]; \n";
+            TABLAS_(pos+"2");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+
         }
 
-        private void TABLAS_()
+        private void TABLAS_(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)//,
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(19);//,
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
-                    TABLAS_();
+                    dot += "node" + pos + "3 [label=\"TABLAS'\"]; \n";
+                    TABLAS_(pos+"3");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    
 
                 }
 
                 else
                 {
                     //EPSILON
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
             }
@@ -403,23 +608,34 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void COLUMNAS()
+        private void COLUMNAS(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if(temp.getToken()==37)//id
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(30);//.
-                    ID();
-                    ALIAS();
-                    COLUMNAS_();
-
+                    dot += "node" + pos + "3 [label=\"ID\"]; \n";
+                    ID(pos+"3");
+                    dot += "node" + pos + "4 [label=\"ALIAS\"]; \n";
+                    ALIAS(pos+"4");
+                    dot += "node" + pos + "5 [label=\"COLUMNAS'\"]; \n";
+                    COLUMNAS_(pos+"5");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    dir += "node" + pos + "-> node" + pos + "4;\n";
+                    dir += "node" + pos + "-> node" + pos + "5;\n";
                 }
                 else if (temp.getToken() == 18)//*
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(18);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else
                 {
@@ -437,25 +653,39 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void COLUMNAS_()
+        private void COLUMNAS_(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)//,
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(19);//,
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
+                    dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
                     match(30);//.
-                    ID();
-                    ALIAS();
-                    COLUMNAS_();
+                    dot += "node" + pos + "4 [label=\"ID\"]; \n";
+                    ID(pos+"4");
+                    dot += "node" + pos + "5 [label=\"ALIAS\"]; \n";
+                    ALIAS(pos+"5");
+                    dot += "node" + pos + "6 [label=\"COLUMNAS'\"]; \n";
+                    COLUMNAS_(pos+"6");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    dir += "node" + pos + "-> node" + pos + "4;\n";
+                    dir += "node" + pos + "-> node" + pos + "5;\n";
+                    dir += "node" + pos + "-> node" + pos + "6;\n";
 
                 }
                 
                 else
                 {
-                   //EPSILON
+                    //EPSILON
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
             }
@@ -467,19 +697,23 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void ID()
+        private void ID(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 18)//18
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(18);//COMO
-                    
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+
                 }
                 else if (temp.getToken() == 37)//ID
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else
                 {
@@ -496,19 +730,25 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void ALIAS()
+        private void ALIAS(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 10)
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(10);//COMO
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
                 }
                 else
                 {
                     //Epsilon
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
 
@@ -521,52 +761,70 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        private void E()
+        private void E(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(15);//ELIMINAR
+            dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
             match(11);//DE
+            dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
-            if (posicion <= tokens.Count - 1)
-            {
-                Token temp = (Token)tokens[posicion];
-                if (temp.getToken() == 12)
-                {
-                    CONDICIONES();
-                }
-                else
-                {
-                    //Epsilon
-                }
+            dot += "node" + pos + "4 [label=\"CONDICIONES\"]; \n";
+            CONDICIONES(pos + "4");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
+            dir += "node" + pos + "-> node" + pos + "4;\n";
 
 
-            }
-            
-            
         }
 
-        private void A()
+        private void A(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(16);//ACTUALIZAR
+            dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
+            dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
             match(17);//ESTABLECER
+            dot += "node" + pos + "4 [label=\"" + valor() + "\"]; \n";
             match(21);//(
-            ESTABLECER_();
+            dot += "node" + pos + "5 [label=\"ESTABLECER\"]; \n";
+            ESTABLECER_(pos+"5");
+            dot += "node" + pos + "6 [label=\"" + valor() + "\"]; \n";
             match(22);//)
-            CONDICIONES();
+            dot += "node" + pos + "7 [label=\"CONDICIONES\"]; \n";
+            CONDICIONES(pos+"7");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
+            dir += "node" + pos + "-> node" + pos + "4;\n";
+            dir += "node" + pos + "-> node" + pos + "5;\n";
+            dir += "node" + pos + "-> node" + pos + "6;\n";
+            dir += "node" + pos + "-> node" + pos + "7;\n";
+            
 
         }
 
-        private void ESTABLECER_()
+        private void ESTABLECER_(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
+            dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
             match(24);//=
-            VALOR();
-            ESTABLECER__();
+            dot += "node" + pos + "3 [label=\"VALOR\"]; \n";
+            VALOR(pos+"3");
+            dot += "node" + pos + "4 [label=\"ESTABLECER''\"]; \n";
+            ESTABLECER__(pos+"4");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
+            dir += "node" + pos + "-> node" + pos + "4;\n";
 
 
         }
 
-        private void ESTABLECER__()
+        private void ESTABLECER__(String pos)
         {
 
             if (posicion <= tokens.Count - 1)
@@ -574,16 +832,28 @@ namespace OLC1_PY1_201700988.Analizadores
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(19);//,
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
+                    dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
                     match(24);//=
-                    VALOR();
-                    ESTABLECER__();
+                    dot += "node" + pos + "4 [label=\"VALOR\"]; \n";
+                    VALOR(pos+"4");
+                    dot += "node" + pos + "5 [label=\"ESTABLECER''\"]; \n";
+                    ESTABLECER__(pos+"5");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    dir += "node" + pos + "-> node" + pos + "4;\n";
+                    dir += "node" + pos + "-> node" + pos + "5;\n";
 
                 }
                 else
                 {
                     //Epsilon
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
 
 
@@ -596,46 +866,71 @@ namespace OLC1_PY1_201700988.Analizadores
             }
         }
 
-        public void C()
+        public void C(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(4);//CREAR
+            dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
             match(5);//TABLA
+            dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
+            dot += "node" + pos + "4 [label=\"" + valor() + "\"]; \n";
             match(21);//(
-            ATRIBUTOS();
+            dot += "node" + pos + "5 [label=\"" + valor() + "\"]; \n";
+            ATRIBUTOS(pos+"5");
+            dot += "node" + pos + "6 [label=\"" + valor() + "\"]; \n";
             match(22);//)
-            
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
+            dir += "node" + pos + "-> node" + pos + "4;\n";
+            dir += "node" + pos + "-> node" + pos + "5;\n";
+            dir += "node" + pos + "-> node" + pos + "6;\n";
 
 
         }
 
-        private void ATRIBUTOS()
+        private void ATRIBUTOS(String pos)
         {
+            dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
             match(37);//ID
-            TIPO();
-            ATRIBUTOS_();
+            dot += "node" + pos + "2 [label=\"TIPO\"]; \n";
+            TIPO(pos+"2");
+            dot += "node" + pos + "3 [label=\"ATRIBUTO'\"]; \n";
+            ATRIBUTOS_(pos+"3");
+            dir += "node" + pos + "-> node" + pos + "1;\n";
+            dir += "node" + pos + "-> node" + pos + "2;\n";
+            dir += "node" + pos + "-> node" + pos + "3;\n";
         }
 
-        private void TIPO()
+        private void TIPO(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 0)//ENTERO
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(0);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 1)//CADENA
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(1);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 2)//FLOTANTE
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(2);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else if (temp.getToken() == 3)//FECHA
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(3);
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
                 else
                 {
@@ -654,21 +949,31 @@ namespace OLC1_PY1_201700988.Analizadores
             
         }
 
-        private void ATRIBUTOS_()
+        private void ATRIBUTOS_(String pos)
         {
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)
                 {
+                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(19);//,
+                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
                     match(37);//ID
-                    TIPO();
-                    ATRIBUTOS_();
+                    dot += "node" + pos + "3 [label=\"TIPO\"]; \n";
+                    TIPO(pos+"3");
+                    dot += "node" + pos + "4 [label=\"ATRIBUTO'\"]; \n";
+                    ATRIBUTOS_(pos+"4");
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
+                    dir += "node" + pos + "-> node" + pos + "2;\n";
+                    dir += "node" + pos + "-> node" + pos + "3;\n";
+                    dir += "node" + pos + "-> node" + pos + "4;\n";
                 }
                 else
                 {
                     //EPSILON
+                    dot += "node" + pos + "1 [label=\"εpsilon\"]; \n";
+                    dir += "node" + pos + "-> node" + pos + "1;\n";
                 }
             }
             else
@@ -709,14 +1014,22 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                int contador = 0;
                 while (temp.getToken() != 20)
                 {
+
                     if (posicion < tokens.Count - 1)
                     {
                         posicion++;
                         temp = (Token)tokens[posicion];
                     }
-
+                    else
+                    {
+                        Console.WriteLine("NO SE LOGRO RECUPERAR ");
+                        MessageBox.Show("No se logro recuperar del error", "Error lexico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                    }
+                    contador++; 
                 }
             }
         }

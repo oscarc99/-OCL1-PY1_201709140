@@ -55,7 +55,14 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Objetos\actualizar.cs" />
+    <Compile Include="Objetos\Atributo.cs" />
+    <Compile Include="Objetos\Condicion.cs" />
+    <Compile Include="Objetos\Condiciones.cs" />
     <Compile Include="Objetos\Error.cs" />
+    <Compile Include="Objetos\Registro.cs" />
+    <Compile Include="Objetos\Seleccion.cs" />
+    <Compile Include="Objetos\Tabla.cs" />
     <Compile Include="Objetos\Token.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
