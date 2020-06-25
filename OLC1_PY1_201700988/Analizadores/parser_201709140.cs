@@ -77,6 +77,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count-1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 4)//Crear
                 {
                     
@@ -172,6 +183,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 35)//Cadena
                 {
                     return convertir(temp.getLexema());
@@ -238,6 +260,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)
                 {
                     dot += "node" + pos + "1 [label=\"" + temp.getLexema() + "\"]; \n";
@@ -273,6 +306,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken()==33)//ENTERO
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -341,6 +385,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 12)//DONDE
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -393,12 +448,23 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 30)//.
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(30);//.
                     dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
-                    match(37);//id
+                    ID(pos+"2");//ID
                     dir += "node" + pos + "-> node" + pos + "1;\n";
                     dir += "node" + pos + "-> node" + pos + "2;\n";
 
@@ -426,6 +492,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 13 || temp.getToken() ==  14)// Y/O
                 {
                     dot += "node" + pos + "1 [label=\"CONDICION'\"]; \n";
@@ -468,6 +545,17 @@ namespace OLC1_PY1_201700988.Analizadores
             {
 
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 13)//Y
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -503,6 +591,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 23)//!=
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -577,6 +676,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)//,
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -613,23 +723,30 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
-                if(temp.getToken()==37)//id
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
                 {
-                    dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
-                    match(37);//ID
-                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
-                    match(30);//.
-                    dot += "node" + pos + "3 [label=\"ID\"]; \n";
-                    ID(pos+"3");
-                    dot += "node" + pos + "4 [label=\"ALIAS\"]; \n";
-                    ALIAS(pos+"4");
-                    dot += "node" + pos + "5 [label=\"COLUMNAS'\"]; \n";
-                    COLUMNAS_(pos+"5");
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
+                if (temp.getToken()==37)//id
+                {
+                    
+                    dot += "node" + pos + "1 [label=\"ID'\"]; \n";
+                    ID_(pos+"1");
+                    dot += "node" + pos + "2 [label=\"ALIAS\"]; \n";
+                    ALIAS(pos+"2");
+                    dot += "node" + pos + "3 [label=\"COLUMNAS'\"]; \n";
+                    COLUMNAS_(pos+"3");
                     dir += "node" + pos + "-> node" + pos + "1;\n";
                     dir += "node" + pos + "-> node" + pos + "2;\n";
                     dir += "node" + pos + "-> node" + pos + "3;\n";
-                    dir += "node" + pos + "-> node" + pos + "4;\n";
-                    dir += "node" + pos + "-> node" + pos + "5;\n";
+                   
                 }
                 else if (temp.getToken() == 18)//*
                 {
@@ -658,26 +775,32 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)//,
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(19);//,
-                    dot += "node" + pos + "2 [label=\"" + valor() + "\"]; \n";
-                    match(37);//ID
-                    dot += "node" + pos + "3 [label=\"" + valor() + "\"]; \n";
-                    match(30);//.
-                    dot += "node" + pos + "4 [label=\"ID\"]; \n";
-                    ID(pos+"4");
-                    dot += "node" + pos + "5 [label=\"ALIAS\"]; \n";
-                    ALIAS(pos+"5");
-                    dot += "node" + pos + "6 [label=\"COLUMNAS'\"]; \n";
-                    COLUMNAS_(pos+"6");
+                    dot += "node" + pos + "2 [label=\"ID'\"]; \n";
+                    ID_(pos + "2");
+                    dot += "node" + pos + "3 [label=\"ALIAS\"]; \n";
+                    ALIAS(pos+"3");
+                    dot += "node" + pos + "4 [label=\"COLUMNAS'\"]; \n";
+                    COLUMNAS_(pos+"4");
                     dir += "node" + pos + "-> node" + pos + "1;\n";
                     dir += "node" + pos + "-> node" + pos + "2;\n";
                     dir += "node" + pos + "-> node" + pos + "3;\n";
                     dir += "node" + pos + "-> node" + pos + "4;\n";
-                    dir += "node" + pos + "-> node" + pos + "5;\n";
-                    dir += "node" + pos + "-> node" + pos + "6;\n";
+                    
 
                 }
                 
@@ -702,7 +825,18 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
-                if (temp.getToken() == 18)//18
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
+                if (temp.getToken() == 18)//*
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
                     match(18);//COMO
@@ -735,6 +869,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 10)
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -830,6 +975,17 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -907,7 +1063,19 @@ namespace OLC1_PY1_201700988.Analizadores
         {
             if (posicion <= tokens.Count - 1)
             {
+
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 0)//ENTERO
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -954,6 +1122,19 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                
+                if (temp.getToken() == 31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do
+                    {
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                    
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == 19)
                 {
                     dot += "node" + pos + "1 [label=\"" + valor() + "\"]; \n";
@@ -991,6 +1172,16 @@ namespace OLC1_PY1_201700988.Analizadores
             if(posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
+                if (temp.getToken() ==31 || temp.getToken() == 32)//Si es comentario 
+                {
+                    Console.WriteLine("");
+                    do{
+                        posicion++;
+                        temp = (Token)tokens[posicion];
+
+                    } while (temp.getToken() == 31 && temp.getToken() == 32);
+                }
+                temp = (Token)tokens[posicion];
                 if (temp.getToken() == token)
                 {
                     posicion++;
@@ -1014,7 +1205,7 @@ namespace OLC1_PY1_201700988.Analizadores
             if (posicion <= tokens.Count - 1)
             {
                 Token temp = (Token)tokens[posicion];
-                int contador = 0;
+                
                 while (temp.getToken() != 20)
                 {
 
@@ -1029,7 +1220,7 @@ namespace OLC1_PY1_201700988.Analizadores
                         MessageBox.Show("No se logro recuperar del error", "Error lexico", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-                    contador++; 
+                    
                 }
             }
         }

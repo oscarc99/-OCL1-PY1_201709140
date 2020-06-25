@@ -22,17 +22,17 @@ namespace OLC1_PY1_201700988.Analizadores
 
         public ArrayList scannerMethod(string entrada)
         {
-            entrada += "#";
+            
             listaErrores = new ArrayList();
             listaTokens = new ArrayList();
             estado = 0;
             aux = "";
-
+            entrada += " ";
             int fila = 0;
             int columna = 0;
 
             char caracter;
-            for (int i = 0; i < entrada.Length-1; i++)
+            for (int i = 0; i < entrada.Length; i++)
             {
                 caracter = entrada[i];
                 switch (estado)
@@ -42,6 +42,7 @@ namespace OLC1_PY1_201700988.Analizadores
                         {
                             columna++;
                             estado = 1;
+                            
 
                         }
                         else if (caracter == ',')//,
@@ -130,6 +131,7 @@ namespace OLC1_PY1_201700988.Analizadores
                         else if (caracter == 13 || caracter == 10 || caracter == 11)
                         {
                             fila++;
+                            columna = 0;
                         }
                         else if (caracter == ' ')
                         {
@@ -259,6 +261,7 @@ namespace OLC1_PY1_201700988.Analizadores
                             fila++;
                             estado = 0;
                             aux = "";
+                            columna = 0;
 
 
                         }
@@ -294,6 +297,7 @@ namespace OLC1_PY1_201700988.Analizadores
                         {
                             aux += caracter.ToString();
                             fila++;
+                            columna = 0;
                         }
                         else
                         {

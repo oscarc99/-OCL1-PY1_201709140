@@ -32,6 +32,11 @@ namespace OLC1_PY1_201700988.Objetos
             return true;
         }
 
+        public void revisar()
+        {
+
+        }
+
         public void setEstado(bool e)
         {
             this.estado = e;

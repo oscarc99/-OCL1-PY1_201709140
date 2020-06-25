@@ -59,15 +59,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
-            this.panelConsulta = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.tabTablas = new System.Windows.Forms.TabControl();
             this.menuStrip1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.panelConsulta.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -150,21 +146,21 @@
             // ejecutarToolStripMenuItem
             // 
             this.ejecutarToolStripMenuItem.Name = "ejecutarToolStripMenuItem";
-            this.ejecutarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ejecutarToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.ejecutarToolStripMenuItem.Text = "Ejecutar";
             this.ejecutarToolStripMenuItem.Click += new System.EventHandler(this.ejecutarToolStripMenuItem_Click);
             // 
             // cargarTablasToolStripMenuItem
             // 
             this.cargarTablasToolStripMenuItem.Name = "cargarTablasToolStripMenuItem";
-            this.cargarTablasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cargarTablasToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.cargarTablasToolStripMenuItem.Text = "Cargar tablas";
             this.cargarTablasToolStripMenuItem.Click += new System.EventHandler(this.cargarTablasToolStripMenuItem_Click);
             // 
             // verTablasToolStripMenuItem
             // 
             this.verTablasToolStripMenuItem.Name = "verTablasToolStripMenuItem";
-            this.verTablasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.verTablasToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.verTablasToolStripMenuItem.Text = "Ver tablas";
             this.verTablasToolStripMenuItem.Click += new System.EventHandler(this.verTablasToolStripMenuItem_Click);
             // 
@@ -175,7 +171,7 @@
             this.erroresToolStripMenuItem,
             this.arbolDeDerivacionToolStripMenuItem});
             this.mostrarToolStripMenuItem.Name = "mostrarToolStripMenuItem";
-            this.mostrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mostrarToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.mostrarToolStripMenuItem.Text = "Mostrar";
             this.mostrarToolStripMenuItem.Click += new System.EventHandler(this.mostrarToolStripMenuItem_Click);
             // 
@@ -203,14 +199,14 @@
             // consultaYRemplazoToolStripMenuItem
             // 
             this.consultaYRemplazoToolStripMenuItem.Name = "consultaYRemplazoToolStripMenuItem";
-            this.consultaYRemplazoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.consultaYRemplazoToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.consultaYRemplazoToolStripMenuItem.Text = "Remplazo";
             this.consultaYRemplazoToolStripMenuItem.Click += new System.EventHandler(this.consultaYRemplazoToolStripMenuItem_Click);
             // 
             // buscarToolStripMenuItem
             // 
             this.buscarToolStripMenuItem.Name = "buscarToolStripMenuItem";
-            this.buscarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.buscarToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.buscarToolStripMenuItem.Text = "Buscar";
             this.buscarToolStripMenuItem.Click += new System.EventHandler(this.buscarToolStripMenuItem_Click);
             // 
@@ -312,31 +308,13 @@
             this.label1.Text = "Consultas:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // panelConsulta
+            // tabTablas
             // 
-            this.panelConsulta.Controls.Add(this.dataGridView1);
-            this.panelConsulta.Location = new System.Drawing.Point(776, 71);
-            this.panelConsulta.Name = "panelConsulta";
-            this.panelConsulta.Size = new System.Drawing.Size(446, 415);
-            this.panelConsulta.TabIndex = 3;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(443, 396);
-            this.dataGridView1.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(904, 42);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.tabTablas.Location = new System.Drawing.Point(786, 71);
+            this.tabTablas.Name = "tabTablas";
+            this.tabTablas.SelectedIndex = 0;
+            this.tabTablas.Size = new System.Drawing.Size(456, 410);
+            this.tabTablas.TabIndex = 5;
             // 
             // Form1
             // 
@@ -344,8 +322,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(1254, 503);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.panelConsulta);
+            this.Controls.Add(this.tabTablas);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
@@ -364,8 +341,6 @@
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.panelConsulta.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -400,10 +375,8 @@
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem consultaYRemplazoToolStripMenuItem;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panelConsulta;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ToolStripMenuItem buscarToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TabControl tabTablas;
     }
 }
 

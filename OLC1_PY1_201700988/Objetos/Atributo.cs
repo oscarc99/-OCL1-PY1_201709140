@@ -15,6 +15,7 @@ namespace OLC1_PY1_201700988.Objetos
         //FECHA    3
         int tipo;
         //Nombre del atributo
+        String tabla;
         String nombre;
         //VALOR A GUARDAR
         String cadena;
@@ -29,6 +30,12 @@ namespace OLC1_PY1_201700988.Objetos
 
         public Atributo(String nombre,int type)
         {
+            this.nombre = nombre.ToUpper();
+            this.tipo = type;
+        }
+        public Atributo(String tabla,String nombre, int type)
+        {
+            this.tabla = tabla.ToUpper();
             this.nombre = nombre.ToUpper();
             this.tipo = type;
         }
@@ -55,6 +62,11 @@ namespace OLC1_PY1_201700988.Objetos
                 fecha = Convert.ToDateTime(convertir(dato));
             }
         }
+        public String getTa()
+        {
+            return this.tabla;
+
+        }
         public int getTipo()
         {
             return tipo;
@@ -72,6 +84,7 @@ namespace OLC1_PY1_201700988.Objetos
             }
             return valor;
         }
+
 
         public void setAtribute(String dato)
         {
@@ -114,5 +127,9 @@ namespace OLC1_PY1_201700988.Objetos
             return null;
         }
 
+        internal void setTable(string v)
+        {
+            this.tabla = v;
+        }
     }
 }

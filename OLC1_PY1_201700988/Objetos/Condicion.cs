@@ -20,6 +20,7 @@ namespace OLC1_PY1_201700988.Objetos
         ///1 cadena
         ///2 flotante
         ///3 fecha
+        ///5 tabla
         ///37 columna
         /// si es 37 
         /// tabla
@@ -32,6 +33,14 @@ namespace OLC1_PY1_201700988.Objetos
         DateTime fecha;
         String tablaVal;
         String columnaVal;
+        public bool esValor()
+        {
+            if(tablaVal.Equals("") && columnaVal.Equals("") || tablaVal==null && columnaVal == null)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public Condicion()
         {
@@ -50,7 +59,30 @@ namespace OLC1_PY1_201700988.Objetos
         {
             return this.columna;
         }
+        public String getTabla()
+        {
+            return this.tabla;
+        }
 
+        public String getTablaVal()
+        {
+            return this.tablaVal;
+
+        }
+
+        public String getColumnaVal()
+        {
+            return this.columnaVal;
+        }
+        public Condicion(String tabla, String columna, int signo,  String tablaVal, String columnaVal, int type)//722692
+        {
+            this.tabla = tabla;
+            this.columna = columna;
+            this.comparacion = signo;
+            this.tipoVal = type;
+            this.tablaVal = tablaVal;
+            this.columnaVal = columnaVal;
+        }
 
         public Condicion(String tabla, String columna, int signo, int type, String tablaVal, String columnaVal)//722692
         {
@@ -61,10 +93,13 @@ namespace OLC1_PY1_201700988.Objetos
             this.tablaVal = tablaVal;
             this.columnaVal = columnaVal;
         }
+        
 
         public Condicion(String tabla, String columna, int signo, int type, String dato)
-        { 
+        {
             //unicamente si es un valor en especifico 
+            tablaVal="";
+            columnaVal="";
             this.tabla = tabla;
             this.columna = columna;
             this.comparacion = signo;

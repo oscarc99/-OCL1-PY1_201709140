@@ -30,6 +30,11 @@ namespace OLC1_PY1_201700988.Objetos
             this.nombre = nombre.ToUpper(); 
             registros = new ArrayList();
         }
+
+        public void setRegistros(ArrayList r)
+        {
+            this.registros = r;
+        }
         public Tabla(String nombre, Registro caracteristica)
         {
             this.nombre = nombre.ToUpper(); ;
